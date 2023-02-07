@@ -16,7 +16,6 @@ app.get('/message', (req, res) => {
     const hash = getQueryParams(req.originalUrl).hash;
     try {
         db.get(`SELECT * FROM messages WHERE hash='${hash}'`, (err, row) => {
-            console.log(row)
             if (row) {
                 getSuccessHandler(res, row)
             } else {
@@ -51,7 +50,6 @@ app.post('/message', (req, res) => {
 
 const getSuccessHandler = (res, result) => {
     const message = result.messages
-    console.log(result)
     res.send(message)
 }
 
@@ -66,10 +64,9 @@ const postSuccessHandler = (res, hash) => {
 
 const failureHandler = (res, error) => {
     res.status(500);
-    console.log(error)
     res.send("Something went wrong")
 }
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Started`)
 })
