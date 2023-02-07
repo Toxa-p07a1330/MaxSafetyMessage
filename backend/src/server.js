@@ -1,9 +1,10 @@
+
 const express = require('express')
+const {getQueryParams} = require("./utils/getQueryParams");
 const app = express()
 const port = 3000
-
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('../database/messages.db');
+const db = new sqlite3.Database('../../database/messages.db');
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
@@ -14,6 +15,12 @@ app.get('/all', (req, res) => {
         console.log(row);
         console.log(err)
     });
+    res.send('Hello World!')
+})
+
+app.get('/message', (req, res) => {
+    console.log(getQueryParams(req.originalUrl))
+
     res.send('Hello World!')
 })
 
