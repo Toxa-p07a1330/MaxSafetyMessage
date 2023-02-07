@@ -16,6 +16,7 @@ app.get('/message', (req, res) => {
     const hash = getQueryParams(req.originalUrl).hash;
     try {
         db.get(`SELECT * FROM messages WHERE hash='${hash}'`, (err, row) => {
+            console.log(row)
             if (row) {
                 getSuccessHandler(res, row)
             } else {
@@ -33,28 +34,33 @@ app.post('/message', (req, res) => {
     const message = req.body.message;
     const hash = createHash(req.body.message)
     try {
-        db.get(`INSERT INTO messages (message, hash) VALUES (message, hash);'`, (err, row) => {
-            if (row) {
-                postSuccessHandler(res, row)
-            } else {
-                failureHandler(res, err)
-            }
-        });
     } catch (e) {
         console.log(e)
         res.sendStatus(500);
     }
+    db.run(`INSERT INTO messages (id, messages,hash)VALUES( ${new Date().getTime()}, '${message}', '${hash}');`, (err, row) => {
+
+        if (!err) {
+            postSuccessHandler(res, hash)
+        } else {
+            failureHandler(res, err)
+        }
+    });
 
 })
 
 const getSuccessHandler = (res, result) => {
-    const message = result.message
+    const message = result.messages
+    console.log(result)
     res.send(message)
 }
 
-const postSuccessHandler = (res, result) => {
-    const message = result.message
-    res.send(message)
+const postSuccessHandler = (res, hash) => {
+    const message = {
+        success: true,
+        hash: hash
+    }
+    res.send(JSON.stringify(message))
 }
 
 
