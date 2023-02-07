@@ -1,22 +1,17 @@
 const express = require('express')
 const {getQueryParams} = require("./utils/getQueryParams");
+const {bruteforceProtection} = require("./bruteforceProtection");
 const app = express()
+app.use(express.json())
 const port = 3000
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('../../database/messages.db');
 
 
-let locked = false;
 app.get('/message', (req, res) => {
-    if (locked) {
-        res.status(504)
-        res.send("Try again  later");
-        return;
-    }
-    locked = true;
-    setTimeout(()=>{
-        locked = false;
-    }, 1000)
+    const protection = bruteforceProtection(res);
+    if (protection === -1)
+        return
     const hash = getQueryParams(req.originalUrl).hash;
     try {
         db.get(`SELECT * FROM messages WHERE hash='${hash}'`, (err, row) => {
@@ -30,6 +25,10 @@ app.get('/message', (req, res) => {
         console.log(e)
         res.sendStatus(404);
     }
+})
+
+app.post('/message', (req, res) => {
+    console.log(req.body)
 })
 
 const successHandler = (res, result) => {
