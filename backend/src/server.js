@@ -1,6 +1,7 @@
 const express = require('express')
 const {getQueryParams} = require("./utils/getQueryParams");
-const {bruteforceProtection} = require("./bruteforceProtection");
+const {bruteforceProtection} = require("./utils/bruteforceProtection");
+const {createHash} = require("./utils/createHash");
 const app = express()
 app.use(express.json())
 const port = 3000
@@ -29,6 +30,7 @@ app.get('/message', (req, res) => {
 
 app.post('/message', (req, res) => {
     console.log(req.body)
+    res.send(createHash(req.body.message))
 })
 
 const successHandler = (res, result) => {
