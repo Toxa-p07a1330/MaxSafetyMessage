@@ -17,29 +17,50 @@ app.get('/message', (req, res) => {
     try {
         db.get(`SELECT * FROM messages WHERE hash='${hash}'`, (err, row) => {
             if (row) {
-                successHandler(res, row)
+                getSuccessHandler(res, row)
             } else {
                 failureHandler(res, err)
             }
         });
     } catch (e) {
         console.log(e)
-        res.sendStatus(404);
+        res.sendStatus(500);
     }
 })
 
 app.post('/message', (req, res) => {
-    console.log(req.body)
-    res.send(createHash(req.body.message))
+
+    const message = req.body.message;
+    const hash = createHash(req.body.message)
+    try {
+        db.get(`INSERT INTO messages (message, hash) VALUES (message, hash);'`, (err, row) => {
+            if (row) {
+                postSuccessHandler(res, row)
+            } else {
+                failureHandler(res, err)
+            }
+        });
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500);
+    }
+
 })
 
-const successHandler = (res, result) => {
+const getSuccessHandler = (res, result) => {
     const message = result.message
     res.send(message)
 }
 
+const postSuccessHandler = (res, result) => {
+    const message = result.message
+    res.send(message)
+}
+
+
 const failureHandler = (res, error) => {
     res.status(500);
+    console.log(error)
     res.send("Something went wrong")
 }
 
