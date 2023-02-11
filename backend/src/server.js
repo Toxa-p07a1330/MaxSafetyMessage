@@ -12,6 +12,8 @@ const cors = require('cors');
 app.use(cors({
     origin: '*'
 }));
+const SqlString = require('sqlstring');
+
 
 
 app.get('/message', (req, res) => {
@@ -36,7 +38,6 @@ app.get('/message', (req, res) => {
 app.post('/message', (req, res) => {
 
     const message = req.body.message;
-    console.log(req.body)
 
     const hash = createHash(req.body.message)
 	console.log(message)
@@ -74,13 +75,17 @@ const postSuccessHandler = (res, hash) => {
 			hash: hash
 		}
     }
+    console.log(message)
     res.send(JSON.stringify(message))
 }
 
 
 const failureHandler = (res, error) => {
     res.status(500);
-    res.send("Something went wrong")
+    console.log(error)
+    res.send(JSON.stringify(
+        {error: "Something went wrong"}
+    ))
 }
 
 app.listen(port, () => {
