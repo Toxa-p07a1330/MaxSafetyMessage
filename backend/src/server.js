@@ -4,9 +4,14 @@ const {bruteforceProtection} = require("./utils/bruteforceProtection");
 const {createHash} = require("./utils/createHash");
 const app = express()
 app.use(express.json())
-const port = 3000
+const port = 3001
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('../../database/messages.db');
+
+const cors = require('cors');
+app.use(cors({
+    origin: '*'
+}));
 
 
 app.get('/message', (req, res) => {
@@ -31,7 +36,10 @@ app.get('/message', (req, res) => {
 app.post('/message', (req, res) => {
 
     const message = req.body.message;
+    console.log(req.body)
+
     const hash = createHash(req.body.message)
+	console.log(message)
     try {
     } catch (e) {
         console.log(e)
@@ -49,14 +57,22 @@ app.post('/message', (req, res) => {
 })
 
 const getSuccessHandler = (res, result) => {
-    const message = result.messages
-    res.send(message)
+    const message = result.messages;
+	const responce = {
+		success: true,
+		payload: {
+			message: message
+		}
+	}
+    res.send(JSON.stringify(responce))
 }
 
 const postSuccessHandler = (res, hash) => {
     const message = {
         success: true,
-        hash: hash
+        payload: {
+			hash: hash
+		}
     }
     res.send(JSON.stringify(message))
 }
