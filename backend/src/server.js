@@ -59,11 +59,15 @@ app.post('/message', (req, res) => {
 })
 
 const getSuccessHandler = (res, result) => {
-    const message = result.messages;
+    const message64 = result.messages;
+    const buff = Buffer.from(message64, 'base64');
+    const messageUTF16 = buff.toString('utf16le');
+
+    console.log(messageUTF16)
 	const responce = {
 		success: true,
 		payload: {
-			message: message
+			message: messageUTF16
 		}
 	}
     res.send(JSON.stringify(responce))
