@@ -37,16 +37,17 @@ app.get('/message', (req, res) => {
 
 app.post('/message', (req, res) => {
 
-    const message = req.body.message;
+    const messageRaw = req.body.message;
+    const message64 = new Buffer(messageRaw).toString('base64');
 
-    const hash = createHash(req.body.message)
-	console.log(message)
+    const hash = createHash(message64)
+	console.log(message64)
     try {
     } catch (e) {
         console.log(e)
         res.sendStatus(500);
     }
-    db.run(`INSERT INTO messages (id, messages,hash)VALUES( ${new Date().getTime()}, '${message}', '${hash}');`, (err, row) => {
+    db.run(`INSERT INTO messages (id, messages,hash)VALUES( ${new Date().getTime()}, '${message64}', '${hash}');`, (err, row) => {
 
         if (!err) {
             postSuccessHandler(res, hash)
