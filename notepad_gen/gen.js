@@ -27,7 +27,7 @@ const generateKeys = (amount) => {
 const generateRealRandomString = () => {
     let string = ''
     for (let i = 0; i < MAX_MESSAGE_LENGTH; i++) {
-        string += String.fromCharCode(crypto.randomInt(0, 65536))
+        string += String.fromCharCode(crypto.randomInt(0, 65530))
     }
     return string
 }

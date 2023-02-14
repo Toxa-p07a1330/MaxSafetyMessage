@@ -60,11 +60,10 @@ app.post('/message', (req, res) => {
 
 const getSuccessHandler = (res, result) => {
     const message64 = result.messages;
-    const buff = Buffer.from(message64, 'base64');
-    const messageUTF16 = buff.toString('utf16le');
-
-    console.log(messageUTF16)
-	const responce = {
+    console.log(message64)
+    const buff = Buffer.from(message64, 'base64').toString("utf-8");
+    const messageUTF16 = buff;
+    const responce = {
 		success: true,
 		payload: {
 			message: messageUTF16
