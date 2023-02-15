@@ -38,16 +38,13 @@ app.get('/message', (req, res) => {
 app.post('/message', (req, res) => {
 
     const messageRaw = req.body.message;
-    const message64 = new Buffer(messageRaw).toString('base64');
-
-    const hash = createHash(message64)
-	console.log(message64)
+    const hash = createHash(messageRaw)
     try {
     } catch (e) {
         console.log(e)
         res.sendStatus(500);
     }
-    db.run(`INSERT INTO messages (id, messages,hash)VALUES( ${new Date().getTime()}, '${message64}', '${hash}');`, (err, row) => {
+    db.run(`INSERT INTO messages (id, messages,hash)VALUES( ${new Date().getTime()}, '${messageRaw}', '${hash}');`, (err, row) => {
 
         if (!err) {
             postSuccessHandler(res, hash)
@@ -60,13 +57,10 @@ app.post('/message', (req, res) => {
 
 const getSuccessHandler = (res, result) => {
     const message64 = result.messages;
-    console.log(message64)
-    const buff = Buffer.from(message64, 'base64').toString("utf-8");
-    const messageUTF16 = buff;
     const responce = {
 		success: true,
 		payload: {
-			message: messageUTF16
+			message: message64
 		}
 	}
     res.send(JSON.stringify(responce))
@@ -79,7 +73,6 @@ const postSuccessHandler = (res, hash) => {
 			hash: hash
 		}
     }
-    console.log(message)
     res.send(JSON.stringify(message))
 }
 

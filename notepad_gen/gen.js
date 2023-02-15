@@ -2,7 +2,7 @@ const crypto = require("crypto");
 const fs = require('fs');
 
 
-const MAX_MESSAGE_LENGTH = 1024;
+const MAX_MESSAGE_LENGTH = 768;
 
 const readline = require('readline').createInterface({
     input: process.stdin,
@@ -19,7 +19,7 @@ const generateKeys = (amount) => {
     for (let i = 0; i < amount; i++) {
         keys.push({
             number: i,
-            key: generateRealRandomString()
+            key: toBase64(generateRealRandomString())
         })
     }
     saveFile(JSON.stringify(keys))
@@ -30,6 +30,9 @@ const generateRealRandomString = () => {
         string += String.fromCharCode(crypto.randomInt(0, 65530))
     }
     return string
+}
+const toBase64 = (srcString) => {
+    return new Buffer(srcString).toString('base64');
 }
 const generateRandomString = (lenght) => {
     const alphabet = "QWERTYUIOPLKJHGFDSAZXCVBNMqwertyuioplkjhgfdsazxcvbnm";
