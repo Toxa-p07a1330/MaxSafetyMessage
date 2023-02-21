@@ -1,11 +1,12 @@
-import {Alert, Button, Clipboard, TextInput, View} from "react-native";
+import {Button, Clipboard, TextInput, View} from "react-native";
 import * as DocumentPicker from 'expo-document-picker';
 import {useState} from "react";
 import NumericInput from 'react-native-numeric-input'
-import {readAsString} from "../../utils/readFileAsString";
-import {constants} from "../../constants";
-import {encode, toBase64} from "../../utils/encode";
-import {sendToServer} from "../../utils/sendToServer";
+import {readAsString} from "../../../utils/readFileAsString";
+import {constants} from "../../../constants";
+import {encode, toBase64} from "../../../utils/encode";
+import {sendToServer} from "../../../utils/sendToServer";
+import {useNavigate} from "react-router-native";
 
 
 export default function Write() {
@@ -39,14 +40,21 @@ export default function Write() {
         setEncrypted(true)
     }
 
-    const copyHandler = ()=>{
+    const copyHandler = () => {
         Clipboard.setString(inputtedText);
         alert('Copied to clipboard')
     }
 
+    const navigate = useNavigate();
+
+    const navigateHandler = () => {
+        const path = `/read`;
+        navigate(path);
+    }
 
     return (
         <View>
+            <Button title={"Read"} onPress={navigateHandler}/>
             {!wasEncrypted && <>
                 <Button
                     title={keys ? "Change notepad" : "Select notepad"}

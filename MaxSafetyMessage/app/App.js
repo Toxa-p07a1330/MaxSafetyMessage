@@ -1,7 +1,6 @@
-import {Link, NativeRouter, Route, Routes} from "react-router-native";
+import {Link, NativeRouter} from "react-router-native";
 import {StyleSheet, Text, View} from "react-native";
-import Read from "./screens/read/Read";
-import Write from "./screens/write/Write";
+import {MyRouters} from "./src/routers/MyRouters";
 
 export default function App() {
     return <NativeRouter>
@@ -24,10 +23,7 @@ export default function App() {
 
             </View>
 
-            <Routes>
-                <Route path="/read" element={<Read/>}/>
-                <Route path="/write" element={<Write/>}/>
-            </Routes>
+            <MyRouters/>
         </View>
     </NativeRouter>
 }

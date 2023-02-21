@@ -1,10 +1,11 @@
 import {Button, TextInput, View} from "react-native";
 import * as DocumentPicker from "expo-document-picker";
-import {readAsString} from "../../utils/readFileAsString";
+import {readAsString} from "../../../utils/readFileAsString";
 import {useState} from "react";
-import {constants} from "../../constants";
-import {getFromServer} from "../../utils/getFromServer";
-import {createHash, encode, fromBase64} from "../../utils/encode";
+import {constants} from "../../../constants";
+import {getFromServer} from "../../../utils/getFromServer";
+import {createHash, encode, fromBase64} from "../../../utils/encode";
+import {useNavigate} from "react-router-native";
 
 
 export default function Read() {
@@ -39,6 +40,14 @@ export default function Read() {
         setInputtedText(plainText)
         setDecrypted(true)
     }
+
+
+    // const navigate = useNavigate();
+    //
+    // const navigateHandler = () => {
+    //     const path = `/write`;
+    //     navigate(path);
+    // }
 
     return (
         <View>
