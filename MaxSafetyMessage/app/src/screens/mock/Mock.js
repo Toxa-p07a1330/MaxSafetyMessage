@@ -1,7 +1,8 @@
-import {Button, Text, TouchableOpacity, View} from "react-native";
+import {Button, Pressable, Text, TouchableOpacity, View} from "react-native";
 import {useNavigate} from "react-router-native";
 import {useEffect, useState} from "react";
 import {ROUTES} from "../../routers/MyRouters";
+import {styles} from "./style";
 
 export default function Mock() {
 
@@ -37,21 +38,25 @@ export default function Mock() {
         }, 1)
     }, [timeShift, isActive])
     return (
-        <View>
+        <View style={styles.wrapper}>
             <Text>
                 <TouchableOpacity onLongPress={navigateHandler}>
-                    <Text>
+                    <Text style={styles.title}>
                         STOPWATCH
                     </Text>
                 </TouchableOpacity>
             </Text>
-            <Text>
+            <Text style={styles.timer_title}>
                 Time
             </Text>
-            <Text>
+            <Text style={styles.time}>
                 {timeShift / 1000}
             </Text>
-            <Button title={isActive ? "Stop" : "Start"} onPress={buttonHandler}/>
+            <Pressable onPress={buttonHandler} style={styles.button} >
+                <Text style={styles.button_text}>
+                    {isActive ? "Stop" : "Start"}
+                </Text>
+            </Pressable>
 
         </View>
     );
