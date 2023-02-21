@@ -24,11 +24,13 @@ app.get('/message', (req, res) => {
     try {
         db.get(`SELECT * FROM messages WHERE hash='${hash}'`, (err, row) => {
             if (row) {
-                getSuccessHandler(res, row)
+                getSuccessHandler(res, row);
             } else {
                 failureHandler(res, err)
             }
         });
+
+        db.get(`DELETE FROM messages WHERE hash='${hash}'`);
     } catch (e) {
         console.log(e)
         res.sendStatus(500);
