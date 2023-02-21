@@ -11,7 +11,6 @@ export const getFromServer = async (hash) => {
             }
         });
         const json = await responce.json()
-        alert(JSON.stringify(json))
         return json
     } catch (e) {
         alert("Error: " + JSON.stringify(e))
