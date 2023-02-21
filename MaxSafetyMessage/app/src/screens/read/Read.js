@@ -5,7 +5,9 @@ import {useState} from "react";
 import {constants} from "../../../constants";
 import {getFromServer} from "../../../utils/getFromServer";
 import {createHash, encode, fromBase64} from "../../../utils/encode";
-import {useNavigate} from "react-router-native";
+import {useGestureNavigation} from "../../hooks/gestureNavigation";
+import {ROUTES} from "../../routers/MyRouters";
+import styles from "./styles";
 
 
 export default function Read() {
@@ -19,6 +21,9 @@ export default function Read() {
     const [inputtedText, setInputtedText] = useState("")
     const [keys, setKeys] = useState(null)
     const [wasDecrypred, setDecrypted] = useState(false)
+
+    const [touchX, setTouchX] = useState(0)
+    const [touchY, setTouchY] = useState(0)
 
     const decryptHandler = async () => {
         const messageHash = JSON.parse(inputtedText).hash;
@@ -42,15 +47,10 @@ export default function Read() {
     }
 
 
-    // const navigate = useNavigate();
-    //
-    // const navigateHandler = () => {
-    //     const path = `/write`;
-    //     navigate(path);
-    // }
+    const [gestureStart, gestureEnd] = useGestureNavigation(touchX, touchY, setTouchX, setTouchY, ROUTES.WRITE)
 
     return (
-        <View>
+        <View onTouchEnd={gestureEnd} onTouchStart={gestureStart} style={styles.wrapper}>
             {!wasDecrypred && <Button
                 title={keys ? "Change notepad" : "Select notepad"}
                 onPress={pickHandler}
@@ -62,10 +62,7 @@ export default function Read() {
                 maxLength={constants.MAX_MESSAGE_LENGTH}
                 onChangeText={text => setInputtedText(text)}
                 value={inputtedText}
-                style={{
-                    padding: 10,
-                    borderWidth: 1,
-                }}
+                style={styles.text_input}
                 placeholder={"Enter message hashing JSON"}
             />
 

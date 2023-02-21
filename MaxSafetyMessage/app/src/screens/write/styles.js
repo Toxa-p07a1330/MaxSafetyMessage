@@ -1,4 +1,4 @@
-const styles = {
+export const styles = {
     wrapper: {
         height: "100%",
     },
@@ -7,4 +7,3 @@ const styles = {
         borderWidth: 1,
     }
 }
-export default styles

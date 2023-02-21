@@ -6,7 +6,9 @@ import {readAsString} from "../../../utils/readFileAsString";
 import {constants} from "../../../constants";
 import {encode, toBase64} from "../../../utils/encode";
 import {sendToServer} from "../../../utils/sendToServer";
-import {useNavigate} from "react-router-native";
+import {ROUTES} from "../../routers/MyRouters";
+import {useGestureNavigation} from "../../hooks/gestureNavigation";
+import {styles} from "./styles";
 
 
 export default function Write() {
@@ -20,8 +22,10 @@ export default function Write() {
     const [templateNumber, setTemplateNumber] = useState(0);
     const [inputtedText, setInputtedText] = useState("")
     const [keys, setKeys] = useState(null)
-
     const [wasEncrypted, setEncrypted] = useState(false)
+
+    const [touchX, setTouchX] = useState(0)
+    const [touchY, setTouchY] = useState(0)
 
     const encryptHandler = async () => {
         const keyText = keys.filter((v) => {
@@ -45,16 +49,10 @@ export default function Write() {
         alert('Copied to clipboard')
     }
 
-    const navigate = useNavigate();
-
-    const navigateHandler = () => {
-        const path = `/read`;
-        navigate(path);
-    }
+    const [gestureStart, gestureEnd] = useGestureNavigation(touchX, touchY, setTouchX, setTouchY, ROUTES.READ)
 
     return (
-        <View>
-            <Button title={"Read"} onPress={navigateHandler}/>
+        <View onTouchEnd={gestureEnd} onTouchStart={gestureStart} style={styles.wrapper}>
             {!wasEncrypted && <>
                 <Button
                     title={keys ? "Change notepad" : "Select notepad"}
@@ -68,10 +66,7 @@ export default function Write() {
                 maxLength={constants.MAX_MESSAGE_LENGTH}
                 onChangeText={text => setInputtedText(text)}
                 value={inputtedText}
-                style={{
-                    padding: 10,
-                    borderWidth: 1,
-                }}
+                style={styles.text_input}
                 placeholder={"Enter message"}
             />
 
